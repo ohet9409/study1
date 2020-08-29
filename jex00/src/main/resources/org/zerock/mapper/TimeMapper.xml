@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace: mapper 인터페이스의 경로 -->
+<mapper namespace="org.zerock.mapper.TimeMapper">
+	<!-- id: 메서드의 이름과 같게  resultType: 인터페이스에 선언된 메서드의 리턴 타입과 같게 -->
+	<select id="getTime2" resultType="string">
+	select sysdate from dual
+	</select>
+</mapper>
