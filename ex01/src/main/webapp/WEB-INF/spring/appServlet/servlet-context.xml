@@ -23,6 +23,20 @@
 	
 	<context:component-scan base-package="org.zerock.controller" />
 	
+	<context:component-scan base-package="org.zerock.exception" />
 	
+	<!-- 파일업로드 처리 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 업로드하는 파일의 이름이 한글일 경우 깨지는 문제를 처리 -->	
+		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
+		<!--한 번의 Request로 전달될 수 있는 최대의 크기 1024 * 1024 * 10 bytes 10MB -->
+		<beans:property name="maxUploadSize" value="104857560"></beans:property>
+		<!--하나의 파일 최대 크기 1024 * 1024 * 2 bytes 2MB -->
+		<beans:property name="maxUploadSizePerFile" value="2097152"></beans:property>
+		<!--  (절대경로: 'file:/'로 시작) -->
+		<beans:property name="uploadTempDir" value="file:/C:/upload/tmp"></beans:property>
+		<!-- 메모리상에서 유지하는 최대의 크기 만일 이 크기 이상의 데이터는 uploadTempDir에 임시 파일의 형태로 보관 -->
+		<beans:property name="maxInMemorySize" value="10485756"></beans:property>
+	</beans:bean>
 	
 </beans:beans>
