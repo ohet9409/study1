@@ -32,7 +32,8 @@ public class ServletConfig implements WebMvcConfigurer{
 		registry.addResourceHandler("/resource/**").addResourceLocations("/resource/");
 	}
 	
-	@Bean(name= "multipartResolver")
+	//주석처리해야 MOCKMVC TEST 가능
+	//@Bean(name= "multipartResolver")
 	public CommonsMultipartResolver getResolver() throws IOException {
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 		

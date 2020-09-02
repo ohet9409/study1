@@ -19,7 +19,7 @@ public class BoardMapperTests {
 	@Setter(onMethod_=@Autowired)
 	private BoardMapper mapper;
 	
-	//@Test
+	@Test
 	public void testGetList() {
 		mapper.getList().forEach(board -> log.info(board));
 	}
@@ -65,7 +65,7 @@ public class BoardMapperTests {
 		log.info("DELETE COUNT: " + mapper.delete(103L));
 	}
 	
-	@Test
+	//@Test
 	public void testUpdate() {
 		
 		BoardVO board = new BoardVO();
