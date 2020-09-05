@@ -27,6 +27,15 @@ public class BoardController {
 		log.info("list");
 		
 		model.addAttribute("list", service.getList());
+		
+	}
+	
+	@GetMapping("/register")
+	public void register() {
+		
+		log.info("register");
+		
+		
 	}
 	
 	@PostMapping("/register")
@@ -36,15 +45,16 @@ public class BoardController {
 		
 		service.register(board);
 		
+		// 일회성 데이터 전달(등록번호)
 		rttr.addFlashAttribute("result" , board.getBno());
 		
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping("/get")
+	@GetMapping({"/get","/modify"})
 	public void get(@RequestParam("bno") Long bno, Model model) {
 		
-		log.info("/get");
+		log.info("/get or modify");
 		
 		model.addAttribute("board", service.get(bno));
 	}
