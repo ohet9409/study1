@@ -29,7 +29,7 @@ public class ServletConfig implements WebMvcConfigurer{
 	
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		
-		registry.addResourceHandler("/resource/**").addResourceLocations("/resource/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
 	//주석처리해야 MOCKMVC TEST 가능
