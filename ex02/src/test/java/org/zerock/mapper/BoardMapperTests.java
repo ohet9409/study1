@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 
@@ -65,7 +64,7 @@ public class BoardMapperTests {
 	//@Test
 	public void testDelete() {
 		
-		log.info("DELETE COUNT: " + mapper.delete(104L));
+		log.info("DELETE COUNT: " + mapper.delete(103L));
 	}
 	
 	//@Test
@@ -74,7 +73,7 @@ public class BoardMapperTests {
 		BoardVO board = new BoardVO();
 		// 실행전 존재하는 번호인지 확인할 것
 		board.setBno(103L);
-		board.setTitle("수정된 제목");
+		board.setTitle("수정된 제목1");
 		board.setContent("수정된 내용");
 		board.setWriter("user00");
 		
@@ -83,7 +82,7 @@ public class BoardMapperTests {
 		log.info("UPDATE COUNT: " + count);
 	}
 	
-	@Test
+	//@Test
 	public void testPaging() {
 		
 		Criteria cri = new Criteria();
@@ -91,6 +90,18 @@ public class BoardMapperTests {
 		//10개씩 3페이지
 		cri.setPageNum(3);
 		cri.setAmount(10);
+				
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		
+		list.forEach(board -> log.info(board));
+	}
+	
+	@Test
+	public void testSearch() {
+		
+		Criteria cri = new Criteria();
+		cri.setKeyword("새로");
+		cri.setType("TC");
 		
 		List<BoardVO> list = mapper.getListWithPaging(cri);
 		
