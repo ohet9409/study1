@@ -52,18 +52,23 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.delete(bno) == 1;
 	}
 
-	@Override
-	public List<BoardVO> getList() {
-		// TODO Auto-generated method stub
-		log.info("get List..........");
-		return mapper.getList();
-	}
+	/*
+	 * @Override public List<BoardVO> getList() { // TODO Auto-generated method stub
+	 * log.info("get List.........."); return mapper.getList(); }
+	 */
 
 	@Override
 	public List<BoardVO> getList(Criteria cri) {
 		// TODO Auto-generated method stub
 		log.info("get List with Criteria: " + cri);
 		return mapper.getListWithPaging(cri);
+	}
+
+	@Override
+	public int getTotal(Criteria cri) {
+		// TODO Auto-generated method stub
+		log.info("get total count");
+		return mapper.getTotalCount(cri);
 	}
 
 }
