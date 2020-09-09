@@ -76,7 +76,65 @@
   <!-- end panel -->
 </div>
 <!-- /.row -->
+<script type="text/javascript" src="/resources/js/reply.js">
 
+</script>
+<script type="text/javascript">
+
+console.log("============");
+console.log("JS TEST");
+
+var bnoValue = '<c:out value="${board.bno}"/>';
+
+// 111번 댓글 가져오기 테스트
+replyService.get(111, function(data) {
+	console.log(data);
+});
+
+// 111번 댓글 수정 테스트
+/* replyService.update({
+		rno : 111,
+		bno : bnoValue,
+		reply : "Modified Reply...."
+	}, function(result) {
+		alert("수정완료");
+	}
+); */
+
+// 112번 댓글 삭제 테스트
+/* replyService.remove(112, function(count){
+	
+	console.log(count);
+	
+		if(count === "success"){
+			alert("removed");
+		}
+
+	}, function(err) {
+		alert('ERROR..');
+	}
+); */
+
+//for replyService getList test
+/* replyService.getList({bno:bnoValue, page:1}, function(list) {
+	
+	for(var i = 0, len = list.length||0; i < len; i++){
+		console.log(list[i]);
+	}
+}); */
+
+// for replyService add test
+/* replyService.add(
+	{reply: "JS TEST", replyer: "tester", bno: bnoValue}
+	, function(result) {
+		alert("RESULT: " + result);
+	}
+); */
+
+$(document).ready(function() {
+	console.log(replyService);
+});
+</script>
 <script type="text/javascript">
 $(document).ready(function() {
   
