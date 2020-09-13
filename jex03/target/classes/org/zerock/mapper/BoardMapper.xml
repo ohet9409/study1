@@ -30,16 +30,16 @@
 		resultType="org.zerock.domain.BoardVO">
   <![CDATA[
   select 
-    bno, title, content, writer, regdate, updatedate
+    bno, title, content, writer, regdate, updatedate, replycnt
   from 
       (
       select /*+INDEX_DESC(tbl_board pk_board) */
-        rownum rn, bno, title, content, writer, regdate, updatedate 
+        rownum rn, bno, title, content, writer, regdate, updatedate, replycnt 
       from 
         tbl_board
       where 
   ]]>
-		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+		<!-- <trim prefix="(" suffix=") AND " prefixOverrides="OR">
 			<foreach item='type' collection="typeArr">
 				<trim prefix="OR">
 					<choose>
@@ -55,8 +55,8 @@
 					</choose>
 				</trim>
 			</foreach>
-		</trim>
-      
+		</trim> -->
+      <include refid="criteria"></include>
   <![CDATA[    
       rownum <= #{pageNum} * #{amount}
       )
