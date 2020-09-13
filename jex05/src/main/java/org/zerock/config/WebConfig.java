@@ -34,7 +34,10 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		// TODO Auto-generated method stub
 		registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 		
+		//파일 업로드 처리
 		MultipartConfigElement multipartConfig = new MultipartConfigElement("C:\\upload\\temp", 20971520, 41943040, 20971520);
+		
+		registration.setMultipartConfig(multipartConfig);
 	}
 	
 	@Override
