@@ -152,8 +152,10 @@
 		
 		 });  
 		 }); */
-
+		 
+		// 확장자 제한
 		var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+		// 파일 크기 제한
 		var maxSize = 5242880; //5MB
 
 		function checkExtension(fileName, fileSize) {
@@ -173,8 +175,6 @@
 		var cloneObj = $(".uploadDiv").clone();
 
 		$("#uploadBtn").on("click", function(e) {
-
-			var formData = new FormData();
 
 			var formData = new FormData();
 

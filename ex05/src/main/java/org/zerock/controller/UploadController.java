@@ -1,16 +1,29 @@
 package org.zerock.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.zerock.domain.AttachFileDTO;
 
 import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Controller
 @Log4j
@@ -54,14 +67,30 @@ public class UploadController {
 		log.info("upload ajax");
 	}
 	
-	@PostMapping("/uploadAjaxAction")
-	public void uploadAjaxPost(MultipartFile[] uploadFile) {
+	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
 		
 		log.info("update ajax post........");
 		
+		List<AttachFileDTO> list = new ArrayList<AttachFileDTO>();
 		String uploadFolder = "C:\\upload";
 		
+		String uploadFolderPath = getFolder();
+		// make folder --------
+		//File uploadPath = new File(uploadFolder, getFolder());
+		File uploadPath = new File(uploadFolder, uploadFolderPath);
+		log.info("upload path: " + uploadPath);
+		
+		if (uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+			log.info("파일생성");
+		}
+		// make yyyy/MM/dd folder
+		
 		for (MultipartFile multipartFile : uploadFile) {
+			
+			AttachFileDTO attachFileDTO = new AttachFileDTO();
 			
 			log.info("---------------");
 			log.info("Upload File Name: " + multipartFile.getOriginalFilename());
@@ -73,17 +102,72 @@ public class UploadController {
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			
 			log.info("only file name: " + uploadFileName);
+			attachFileDTO.setFileName(uploadFileName);
 			
-			File saveFile = new File(uploadFolder, uploadFileName);
+			UUID uuid = UUID.randomUUID();
+			
+			log.info("UUID: " + uuid.toString());
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
+			
+			//File saveFile = new File(uploadFolder, uploadFileName);
+			File saveFile = new File(uploadPath, uploadFileName);
+			
+			log.info("saveFile: " + saveFile);
 			
 			try {
 			
 				multipartFile.transferTo(saveFile);
+				
+				attachFileDTO.setUuid(uuid.toString());
+				attachFileDTO.setUploadPath(uploadFolderPath);
+				
+				//check Image Type file
+				if (checkImageType(saveFile)) {
+
+					attachFileDTO.setImage(true);
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+					
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100 , 100);
+					
+					thumbnail.close();
+				}
+				
+				// add to List
+				list.add(attachFileDTO);
+				
 			} catch (Exception e) {
 				// TODO: handle exception
 				log.info(e.getMessage());
 			}
 			
+		} // end for
+		
+		return new ResponseEntity<List<AttachFileDTO>>(list, HttpStatus.OK);
+	}
+	
+	private String getFolder() {
+	
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = new Date();
+		
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
+	}
+	
+	private boolean checkImageType(File file) {
+		
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			
+			log.info("contentType: " + contentType.toString());
+			return contentType.startsWith("image");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		return false;
 	}
 }
