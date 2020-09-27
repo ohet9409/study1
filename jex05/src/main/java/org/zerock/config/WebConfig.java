@@ -1,7 +1,6 @@
 package org.zerock.config;
 
 import javax.servlet.Filter;
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRegistration.Dynamic;
 
@@ -33,11 +32,6 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
 		// TODO Auto-generated method stub
 		registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
-		
-		//파일 업로드 처리
-		MultipartConfigElement multipartConfig = new MultipartConfigElement("C:\\upload\\temp", 20971520, 41943040, 20971520);
-		
-		registration.setMultipartConfig(multipartConfig);
 	}
 	
 	@Override
