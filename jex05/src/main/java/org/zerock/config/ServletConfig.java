@@ -33,7 +33,7 @@ public class ServletConfig implements WebMvcConfigurer{
 	}
 	
 	//주석처리해야 MOCKMVC TEST 가능
-	//@Bean(name= "multipartResolver")
+	@Bean(name= "multipartResolver")
 	public CommonsMultipartResolver getResolver() throws IOException {
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 		

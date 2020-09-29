@@ -102,7 +102,7 @@ $(document).ready(function(e) {
 			
 		});
 		
-		//formObj.append(str).submit();
+		formObj.append(str).submit();
 	});
 	
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
