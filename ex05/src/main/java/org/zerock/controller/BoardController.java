@@ -1,6 +1,10 @@
 package org.zerock.controller;
 
 import java.awt.PageAttributes.MediaType;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -40,6 +44,38 @@ public class BoardController {
 	 * 
 	 * }
 	 */
+	
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		
+		log.info("delete attach files.....");
+		log.info(attachList);
+		
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+			
+			
+				Files.deleteIfExists(file);
+				
+				log.info("Files.deleteIfExists(file): " + file);
+				if (Files.probeContentType(file).startsWith("image")) {
+					
+					Path thumbNail = Paths.get("C:\\upload\\" + attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+					
+					Files.delete(thumbNail);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				log.error("delete file error" + e.getMessage());
+				//e.printStackTrace();
+			} // end catch
+			
+		}); // end foreach
+	}
 	
 	@GetMapping(value = "/getAttachList", produces = org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -123,7 +159,14 @@ public class BoardController {
 	public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
 		
 		log.info("remove...." + bno);
+		
+		List<BoardAttachVO> attachList = service.getAttachList(bno);
+		
 		if (service.remove(bno)) {
+			
+			// delete Attach Files
+			deleteFiles(attachList);
+			
 			rttr.addFlashAttribute("result", "success");
 		}
 		
