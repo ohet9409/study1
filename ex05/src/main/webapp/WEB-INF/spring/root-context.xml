@@ -5,7 +5,9 @@
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
@@ -13,6 +15,8 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		<context:annotation-config></context:annotation-config>
+		<!-- 스켈줄링 작업 -->
+		<task:annotation-driven/>
 		
 		<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 			<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
@@ -40,6 +44,7 @@
 		
 		<context:component-scan base-package="org.zerock.service"></context:component-scan>
 		<context:component-scan base-package="org.zerock.aop"></context:component-scan>
+		<context:component-scan base-package="org.zerock.task"></context:component-scan>
 		
 		<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 </beans>
