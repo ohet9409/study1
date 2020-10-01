@@ -5,11 +5,54 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<security:http>
-		<security:form-login/>
+	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
+	
+	<security:http auto-config="true" use-expressions="true">
+	
+		<!-- 접속 가능 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll"/>
+		
+		<!-- 권한 체크를 위해 로그인 페이지 이동 -->		
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+		
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+		
+		<!-- 로그인 페이지 이동 -->
+		<!-- <security:form-login/> -->
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		
+		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		
 	</security:http>
+	
+	<!-- <security:http auto-config="true" use-expressions="false">
+	
+	<security:intercept-url pattern="/sample/all" access="ROLE_MEMBER"/>
+	
+	<security:intercept-url pattern="/sample/admin" access="ROLE_ADMIN"/>
+	
+	<security:intercept-url pattern="/sample/member" access="ROLE_MANAGER"/>
+	
+	</security:http> -->
 
 	<security:authentication-manager>
+	
+		<security:authentication-provider>
+		
+			<security:user-service>
+			
+				<security:user name="member" authorities="ROLE_MEMBER" password="{noop}member"/>
+				
+				<security:user name="admin" authorities="ROLE_ADMIN, ROLE_MEMBER" password="{noop}admin"/>
+				
+			</security:user-service>
+			
+		</security:authentication-provider>
 	
 	</security:authentication-manager>
 </beans>
