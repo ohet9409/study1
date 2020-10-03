@@ -7,6 +7,8 @@
 
 	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
 	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
+	<!-- <bean id="customNoOpPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean> -->
+	<bean id="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	
 	<security:http auto-config="true" use-expressions="true">
 	
@@ -40,7 +42,7 @@
 	
 	</security:http> -->
 
-	<security:authentication-manager>
+	<!-- <security:authentication-manager>
 	
 		<security:authentication-provider>
 		
@@ -54,5 +56,21 @@
 			
 		</security:authentication-provider>
 	
+	</security:authentication-manager> -->
+	
+	<security:authentication-manager>
+		
+		<security:authentication-provider>
+		
+			<!-- <security:jdbc-user-service data-source-ref="dataSource"/> -->
+			<security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select userid, userpw, enabled from tbl_member where userid = ?"
+			authorities-by-username-query="select userid, auth from tbl_member_auth where userid = ?"/>
+			
+			
+			<!-- <security:password-encoder ref="customNoOpPasswordEncoder"/> -->	<!-- change to Bcrypt -->
+			<security:password-encoder ref="BCryptPasswordEncoder"/>
+			
+		</security:authentication-provider>
+		
 	</security:authentication-manager>
 </beans>
