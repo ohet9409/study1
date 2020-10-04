@@ -4,6 +4,9 @@
 <head>
 	<title>Home</title>
 </head>
+<script type="text/javascript">
+self.location="/board/list";
+</script>
 <body>
 <h1>
 	Hello world!  

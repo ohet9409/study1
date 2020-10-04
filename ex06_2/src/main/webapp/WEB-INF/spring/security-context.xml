@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
-	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
+	<!-- <bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean> -->
 	
 	<!-- <bean id="customNoOpPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean> -->
 	<bean id="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
@@ -24,8 +24,8 @@
 		
 		<!-- 로그인 페이지 이동 -->
 		<!-- <security:form-login/> -->
-		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
-	    <!-- <security:form-login login-page="/customLogin"/> -->
+		<!-- <security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/> -->
+	    <security:form-login login-page="/customLogin"/>
 		
 		<!-- <security:access-denied-handler error-page="/accessError"/> -->
 		
