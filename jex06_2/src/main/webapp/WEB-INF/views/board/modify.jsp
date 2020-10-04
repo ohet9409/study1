@@ -185,6 +185,9 @@ $(document).ready(function() {
 		return true;
 	}
 	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
 	$("input[type='file']").change(function(e) {
 		
 		var formData = new FormData();
@@ -207,6 +210,9 @@ $(document).ready(function() {
 			contentType: false,
 			data: formData,
 			type: 'POST',
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			dataType: 'json',
 			success: function(result) {
 				console.log(result);
@@ -350,8 +356,8 @@ $(document).ready(function() {
 			if (confirm("Remove this file")) {
 				
 				var targetLi = $(this).closest("li");
-				console.log(targetLi);
-				targetLi.remove;
+				console.log("target: " + targetLi);
+				targetLi.remove();
 			}
 		});
 		

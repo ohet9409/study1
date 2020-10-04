@@ -46,10 +46,12 @@ var replyService = (function() {
 			});
 	}
 	
-	function remove(rno, callback, error) {
+	function remove(rno, replyer, callback, error) {
 		$.ajax({
 			type : 'delete',
 			url	: '/replies/' + rno,
+			data: JSON.stringify({rno: rno, replyer:replyer}),
+			contentType: "application/json; charset=utf-8",
 			success : function(deleteResult, status, xhr) {
 				if(callback){
 					callback("댓글 삭제 성공");
@@ -64,21 +66,21 @@ var replyService = (function() {
 	}
 	
 	function update(reply, callback, error) {
-		
+
 		console.log("RNO: " + reply.rno);
-		
+
 		$.ajax({
 			type : 'put',
 			url : '/replies/' + reply.rno,
 			data : JSON.stringify(reply),
-			contentType : "application/json; charset=UTF-8",
+			contentType : "application/json; charset=utf-8",
 			success : function(result, status, xhr) {
 				if (callback) {
-					callback('댓글 수정완료');
+					callback(result);
 				}
 			},
 			error : function(xhr, status, er) {
-				if(error){
+				if (error) {
 					error(er);
 				}
 			}
