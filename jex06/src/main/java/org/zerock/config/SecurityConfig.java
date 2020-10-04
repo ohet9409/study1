@@ -49,8 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/sample/admin").access("hasRole('ROLE_ADMIN')")
 		.antMatchers("/sample/member").access("hasRole('ROLE_MEMBER')");
 		
-		http.formLogin().loginPage("/customLogin").loginProcessingUrl("/login")
-		.successHandler(loginSuccessHandler());
+		/*
+		 * http.formLogin().loginPage("/customLogin").loginProcessingUrl("/login")
+		 * .successHandler(loginSuccessHandler());
+		 */
+		http.formLogin().loginPage("/customLogin").loginProcessingUrl("/login");
+		
 		
 		http.logout().logoutUrl("/customLogout").invalidateHttpSession(true).deleteCookies("remember-me", "JSESSION_ID");
 		

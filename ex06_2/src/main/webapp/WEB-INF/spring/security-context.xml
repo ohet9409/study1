@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>
+	
+	<!-- <bean id="customNoOpPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean> -->
+	<bean id="BCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+	<bean id="customUserDetailsService" class="org.zerock.security.CustomUserDetailsService"></bean>
+	
+	<security:http auto-config="true" use-expressions="true">
+	
+		<!-- 접속 가능 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll"/>
+		
+		<!-- 권한 체크를 위해 로그인 페이지 이동 -->		
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+		
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+		
+		<!-- 로그인 페이지 이동 -->
+		<!-- <security:form-login/> -->
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+	    <!-- <security:form-login login-page="/customLogin"/> -->
+		
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		
+		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+		
+		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="remember-me,JSESSION_ID"/>
+		
+	</security:http>
+	
+	<!-- <security:http auto-config="true" use-expressions="false">
+	
+	<security:intercept-url pattern="/sample/all" access="ROLE_MEMBER"/>
+	
+	<security:intercept-url pattern="/sample/admin" access="ROLE_ADMIN"/>
+	
+	<security:intercept-url pattern="/sample/member" access="ROLE_MANAGER"/>
+	
+	</security:http> -->
+
+	<!-- <security:authentication-manager>
+	
+		<security:authentication-provider>
+		
+			<security:user-service>
+			
+				<security:user name="member" authorities="ROLE_MEMBER" password="{noop}member"/>
+				
+				<security:user name="admin" authorities="ROLE_ADMIN, ROLE_MEMBER" password="{noop}admin"/>
+				
+			</security:user-service>
+			
+		</security:authentication-provider>
+	
+	</security:authentication-manager> -->
+	
+	<security:authentication-manager>
+		
+		<security:authentication-provider user-service-ref="customUserDetailsService">
+		
+			<!-- <security:jdbc-user-service data-source-ref="dataSource"/> -->
+			
+			<!-- <security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select userid, userpw, enabled from tbl_member where userid = ?"
+			authorities-by-username-query="select userid, auth from tbl_member_auth where userid = ?"/> -->
+			
+			
+			<!-- <security:password-encoder ref="customNoOpPasswordEncoder"/> -->	<!-- change to Bcrypt -->
+			<security:password-encoder ref="BCryptPasswordEncoder"/>
+			
+		</security:authentication-provider>
+		
+	</security:authentication-manager>
+</beans>
